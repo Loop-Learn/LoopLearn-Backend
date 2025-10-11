@@ -1,0 +1,6 @@
+@LoopLearnWebAPI_HostAddress = http://localhost:5070
+
+GET {{LoopLearnWebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
