@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LoopLearn.Entities.Models
 {
-    public class User
+    public abstract class User
     {
         public int Id { get; set; }
         public string Username { get; set; }
