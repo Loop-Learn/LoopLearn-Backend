@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoopLearn.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251011224823_AddNewRelationShips")]
-    partial class AddNewRelationShips
+    [Migration("20251013084909_FirstCreationToDb")]
+    partial class FirstCreationToDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
