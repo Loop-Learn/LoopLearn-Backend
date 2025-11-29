@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace LoopLearn.Entities.Repositories
 {
-    public interface IUsersRepository:IGenericRepository<User>
+    public interface ICoursesRepository : IGenericRepository<Course>
     {
-        void Update(User user);
+        void Update(Course course);
     }
 }

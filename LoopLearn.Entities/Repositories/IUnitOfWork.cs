@@ -8,7 +8,8 @@ namespace LoopLearn.Entities.Repositories
 {
     public interface IUnitOfWork : IDisposable
     {
-        IUsersRepository User { get; }
+        IStudentsRepository Student { get; }
+        ICoursesRepository Course { get; }
 
         int Complete();
     }

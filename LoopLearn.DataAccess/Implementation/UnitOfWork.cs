@@ -12,11 +12,13 @@ namespace LoopLearn.DataAccess.Implementation
     {
         private readonly ApplicationDbContext _context;
 
-        public IUsersRepository User { get; private set; }
+        public IStudentsRepository Student { get; private set; }
+        public ICoursesRepository Course { get; private set; }
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
-            User= new UsersRepository(context);
+            Student= new StudentsRepository(context);
+            Course= new CoursesRepository(context);
             
         }
 

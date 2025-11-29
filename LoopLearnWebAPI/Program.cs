@@ -1,5 +1,7 @@
 
 using LoopLearn.DataAccess.Data;
+using LoopLearn.DataAccess.Implementation;
+using LoopLearn.Entities.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace LoopLearnWebAPI
@@ -11,6 +13,9 @@ namespace LoopLearnWebAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
