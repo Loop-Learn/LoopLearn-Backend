@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace LoopLearn.Entities.Models
 {
@@ -10,6 +11,9 @@ namespace LoopLearn.Entities.Models
     {
         public int Id { get; set; }
         public string Username { get; set; }
+        public string FName { get; set; }
+        public string LName { get; set; }
+        public string FullName => $"{FName} {LName}";
         public string Password { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }

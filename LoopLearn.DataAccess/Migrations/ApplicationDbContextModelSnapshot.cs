@@ -269,6 +269,10 @@ namespace LoopLearn.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
@@ -278,6 +282,10 @@ namespace LoopLearn.DataAccess.Migrations
 
                     b.Property<DateTime>("JoinDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("LName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
