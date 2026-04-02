@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
 
-namespace LoopLearnWebAPI.Controllers
+namespace LoopLearnWebAPI.Areas.Student
 {
+    [Area("Student")]
     [ApiController]
-    [Route("/api/[controller]")]
+    [Route("/api/[area]/[controller]")]
     public class StudentController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
@@ -15,12 +16,14 @@ namespace LoopLearnWebAPI.Controllers
             unitOfWork = _unitOfWork;
         }
         [HttpGet]
+        [Produces("application/json")]
         public IActionResult GetStudents()
         {
             var students = unitOfWork.Student.GetAll();
             return Ok(students);
         }
         [HttpGet("{id}")]
+        [Produces("application/json")]
         public IActionResult GetStudentById(int id)
         {
             var student = unitOfWork.Student.GetFirstOrDefault(c => c.Id == id);
