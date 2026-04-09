@@ -18,8 +18,4 @@
     <ProjectReference Include="..\LoopLearn.Entities\LoopLearn.Entities.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTO\" />
-  </ItemGroup>
-
 </Project>

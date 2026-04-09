@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LoopLearnWebAPI.Areas.Department
+namespace LoopLearnWebAPI.Areas.Course
 {
-    [Area("Department")]
+    [Area("Course")]
     [ApiController]
     [Route("/api/[area]/[controller]")]
     public class CourseController : ControllerBase

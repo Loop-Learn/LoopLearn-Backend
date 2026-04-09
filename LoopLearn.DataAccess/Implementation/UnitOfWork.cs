@@ -14,12 +14,11 @@ namespace LoopLearn.DataAccess.Implementation
 
         IStudentsRepository student;
         ICoursesRepository course;
+        IInstructorsRepository instructor;
+        IUsersRepository user;
         public UnitOfWork(ApplicationDbContext context)
         {
-            _context = context;
-            //Student= new StudentsRepository(context);
-            //Course= new CoursesRepository(context);
-            
+            _context = context;            
         }
         public IStudentsRepository Student
         {
@@ -34,6 +33,21 @@ namespace LoopLearn.DataAccess.Implementation
             private set
             {
                 student = value;
+            }
+        }
+        public IInstructorsRepository Instructor
+        {
+            get
+            {
+                if (instructor == null)
+                {
+                    instructor = new InstructorsRepository(_context);
+                }
+                return instructor;
+            }
+            private set
+            {
+                instructor = value;
             }
         }
         public ICoursesRepository Course
@@ -51,8 +65,23 @@ namespace LoopLearn.DataAccess.Implementation
                 course = value;
             }
         }
+        public IUsersRepository User
+        {
+            get
+            {
+                if(user == null)
+                {
+                    user = new UsersRepository(_context);
+                }
+                return user;
+            }
+            private set
+            {
+                user = value;
+            }
+        }
 
-        public int Complete()
+        public int Save()
         {
             return _context.SaveChanges();
         }

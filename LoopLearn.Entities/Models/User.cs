@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static LoopLearn.Entities.utils.Enums;
 
 namespace LoopLearn.Entities.Models
 {
@@ -17,11 +18,11 @@ namespace LoopLearn.Entities.Models
         public string Password { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public DateTime BithDate { get; set; }
-        public char Gender { get; set; }
-        public bool IsVerifiedEmail { get; set; }
+        public DateTime BirthDate { get; set; }
+        public Gender Gender { get; set; }
+        public bool IsVerifiedEmail { get; set; } = false;
         public DateTime JoinDate { get; set; }
         public string Avatar { get; set; }
-        public string RoleType { get; set; }
+        public RoleType Role { get; set; }
     }
 }

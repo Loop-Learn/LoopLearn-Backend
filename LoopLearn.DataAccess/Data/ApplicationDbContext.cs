@@ -67,6 +67,12 @@ namespace LoopLearn.DataAccess.Data
                 .WithMany(c => c.LessonComments)
                 .HasForeignKey(f => f.LessonId)
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<User>()
+                .Property(u => u.Gender)
+                .HasConversion<string>();
+            modelBuilder.Entity<User>()
+                .Property(u => u.Role)
+                .HasConversion<string>();
         }
     }
 }

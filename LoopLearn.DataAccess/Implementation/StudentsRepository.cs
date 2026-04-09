@@ -22,10 +22,11 @@ namespace LoopLearn.DataAccess.Implementation
             var userInDb = _context.Students.FirstOrDefault(u => u.Id == student.Id);
             if (userInDb != null)
             {
-                userInDb.Username = student.Username;
-                userInDb.Avatar= student.Avatar;
-                userInDb.Phone=student.Phone;
-                userInDb.Email=student.Email;
+                userInDb.FName = student.FName;
+                userInDb.LName = student.LName;
+                userInDb.Avatar = student.Avatar;
+                userInDb.Phone = student.Phone;
+                userInDb.Email = student.Email;
                 userInDb.Password = student.Password;
 
             }

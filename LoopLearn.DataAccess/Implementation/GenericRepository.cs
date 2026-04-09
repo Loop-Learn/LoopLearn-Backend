@@ -25,6 +25,11 @@ namespace LoopLearn.DataAccess.Implementation
             _dbSet.Add(entity);
         }
 
+        public bool Exists(Expression<Func<T, bool>> predicate)
+        {
+            return _dbSet.Any(predicate);
+        }
+
         public IEnumerable<T> GetAll(Expression<Func<T, bool>>? predicate = null, string? Include = null)
         {
             IQueryable<T> query = _dbSet;

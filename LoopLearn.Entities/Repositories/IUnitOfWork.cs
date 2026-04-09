@@ -10,7 +10,9 @@ namespace LoopLearn.Entities.Repositories
     {
         IStudentsRepository Student { get; }
         ICoursesRepository Course { get; }
+        IInstructorsRepository Instructor { get; }
+        IUsersRepository User { get; }
 
-        int Complete();
+        int Save();
     }
 }
