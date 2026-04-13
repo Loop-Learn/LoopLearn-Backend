@@ -1,6 +1,8 @@
 
 using LoopLearn.DataAccess.Data;
+using LoopLearn.DataAccess.Helpers;
 using LoopLearn.DataAccess.Implementation;
+using LoopLearn.DataAccess.Services.Auth;
 using LoopLearn.Entities.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -15,12 +17,13 @@ namespace LoopLearnWebAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            var jwtKey = builder.Configuration["Jwt:key"];
+            var jwtKey = builder.Configuration["Jwt:Key"];
             var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
 
             // Add services to the container.
-
+            builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwt"));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -61,6 +64,7 @@ namespace LoopLearnWebAPI
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

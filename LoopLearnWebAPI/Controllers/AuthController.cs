@@ -1,7 +1,9 @@
-﻿using LoopLearn.Entities.DTO;
+﻿using LoopLearn.DataAccess.Services.Auth;
+using LoopLearn.Entities.DTO;
 using LoopLearn.Entities.Models;
 using LoopLearn.Entities.Repositories;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,74 +17,37 @@ namespace LoopLearnWebAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IConfiguration _config;
-        public AuthController(IUnitOfWork _unitOfWork, IConfiguration config)
+        private readonly IAuthService authService;
+        public AuthController(IAuthService _authService)
         {
-            unitOfWork = _unitOfWork;
-            _config = config;
+            authService = _authService;
         }
         [HttpPost("register")]
         [Consumes("application/json")]
         public IActionResult Register([FromBody] RegisterDTO registerDTO)
         {
-            var userNameExists = unitOfWork.User.Exists(u => u.Username == registerDTO.Username);
-            if (userNameExists) return BadRequest("Username is already Exist.");
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var EmailExists = unitOfWork.User.Exists(u => u.Email == registerDTO.Email);
-            if (EmailExists) return BadRequest("Email is already Exist.");
+            var result = authService.Register(registerDTO);
+            if (!result.IsAuthenticated) 
+                return BadRequest(result.Message);
 
-            var newStudent = new Student()
-            {
-                FName = registerDTO.FName,
-                LName = registerDTO.LName,
-                Username = registerDTO.Username,
-                Email = registerDTO.Email,
-                Password = BCrypt.Net.BCrypt.HashPassword(registerDTO.Password),
-                BirthDate = registerDTO.BirthDate,
-                Phone = registerDTO.Phone,
-                Gender = registerDTO.Gender,
-                Role = RoleType.Student,
-                Avatar = "not attached"
-
-            };
-            unitOfWork.User.Add(newStudent);
-            unitOfWork.Save();
-            return Created();
+            return Ok(result);
         }
         [HttpPost("login")]
         [Consumes("application/json")]
         public IActionResult Login([FromBody] LoginDTO loginDTO)
         {
-            var user = unitOfWork.User.GetFirstOrDefault(u=>u.Username == loginDTO.Username || u.Email==loginDTO.Email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(loginDTO.Password, user.Password))
-            {
-                return Unauthorized("Invalid credentials. Incorrect Username/Email or Password ");
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var token = GenerateToken(user);
-            return Ok(new { token = token });
+            var result = authService.Login(loginDTO);
+            if (!result.IsAuthenticated)
+                return BadRequest(result.Message);
+
+            return Ok(result);
         }
-        private string GenerateToken(User user)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
-            {
-            new Claim(ClaimTypes.NameIdentifier, user.Username),
-            new Claim(ClaimTypes.NameIdentifier, user.Email),
-            new Claim(ClaimTypes.Role, user.Role.ToString()) 
-            };
-
-            var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30), 
-                signingCredentials: credentials);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+    
     }
 }
