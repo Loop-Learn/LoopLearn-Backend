@@ -20,4 +20,8 @@
     <ProjectReference Include="..\LoopLearn.DataAccess\LoopLearn.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Course\" />
+  </ItemGroup>
+
 </Project>

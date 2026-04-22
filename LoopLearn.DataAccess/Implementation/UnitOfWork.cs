@@ -16,6 +16,8 @@ namespace LoopLearn.DataAccess.Implementation
         ICoursesRepository course;
         IInstructorsRepository instructor;
         IUsersRepository user;
+        IFeedbackRepository feedback;
+        ILessonRepository lesson;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;            
@@ -80,7 +82,38 @@ namespace LoopLearn.DataAccess.Implementation
                 user = value;
             }
         }
+        public IFeedbackRepository Feedback
+        {
+            get
+            {
+                if (feedback == null)
+                {
+                    feedback = new FeedbackRepository(_context);
+                }
+                return feedback;
+            }
+            private set
+            {
+                feedback = value;
 
+            }
+        }
+        public ILessonRepository Lesson
+        {
+            get
+            {
+                if (lesson == null)
+                {
+                    lesson = new LessonRepository(_context);
+                }
+                return lesson;
+            }
+            private set
+            {
+                lesson = value;
+
+            }
+        }
         public int Save()
         {
             return _context.SaveChanges();

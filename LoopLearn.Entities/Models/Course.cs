@@ -1,4 +1,6 @@
-﻿namespace LoopLearn.Entities.Models
+﻿using static LoopLearn.Entities.utils.Enums;
+
+namespace LoopLearn.Entities.Models
 {
     public class Course
     {
@@ -6,7 +8,8 @@
         public string Title { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }
-        public string Level { get; set; }
+        public string Avatar { get; set; }
+        public Level Level { get; set; }
         public double Price { get; set; }
         public int Duration { get; set; }
         public DateTime CreatedAt { get; set; }
