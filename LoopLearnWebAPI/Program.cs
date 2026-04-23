@@ -1,4 +1,3 @@
-
 using LoopLearn.DataAccess.Data;
 using LoopLearn.DataAccess.Helpers;
 using LoopLearn.DataAccess.Implementation;
@@ -20,7 +19,6 @@ namespace LoopLearnWebAPI
             var jwtKey = builder.Configuration["Jwt:Key"];
             var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
 
-            // Add services to the container.
             builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwt"));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IAuthService, AuthService>();
@@ -28,15 +26,26 @@ namespace LoopLearnWebAPI
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            // ✅ CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
+
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -51,25 +60,29 @@ namespace LoopLearnWebAPI
                         IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
                     };
                 });
+
             builder.Services.AddAuthorization();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            // ✅ HTTPS redirect only in production
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseHttpsRedirection();
+            }
 
+            // ✅ CORS before Auth — ORDER MATTERS
+            app.UseCors("AllowFrontend");
             app.UseAuthentication();
             app.UseAuthorization();
 
-
             app.MapControllers();
-
             app.Run();
         }
     }
