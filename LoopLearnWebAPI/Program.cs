@@ -25,7 +25,17 @@ namespace LoopLearnWebAPI
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IAuthService, AuthService>();
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
+			builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddControllers();
@@ -62,7 +72,9 @@ namespace LoopLearnWebAPI
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            app.UseCors("AllowAll");
+
+			app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
