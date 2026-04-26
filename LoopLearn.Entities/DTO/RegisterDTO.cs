@@ -19,7 +19,8 @@ namespace LoopLearn.Entities.DTO
         public string Username { get; set; }
 
         [Required, StringLength(100)]
-        [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", ErrorMessage = "Email address is not Valid.")]
+        [RegularExpression(@"^[A-Za-z0-9._%+-]+@[A-Za-z]+\.[A-Za-z]{2,}$", ErrorMessage = "Email address is not Valid.")]
+        [EmailAddress(ErrorMessage = "Email address is not Valid.")]
         public string Email { get; set; }
 
         [Required, StringLength(256, MinimumLength = 8)]
@@ -41,7 +42,7 @@ namespace LoopLearn.Entities.DTO
         [CustomValidation(typeof(CustomValidation),nameof(CustomValidation.BirthDate))]
         public DateTime BirthDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Gender must be Male or Female")]
         public Gender Gender { get; set; }
 
         //[Required]

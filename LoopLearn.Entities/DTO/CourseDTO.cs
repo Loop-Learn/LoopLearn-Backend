@@ -28,6 +28,7 @@ namespace LoopLearn.Entities.DTO
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
         public List<string> LessonsName { get; set; } = new List<string>();
+        public List<string> Comments { get; set; } = new List<string>();
     }
     public class CreateCourseDTO
     {

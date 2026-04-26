@@ -60,20 +60,24 @@ namespace LoopLearnWebAPI.Controllers
             }
             try
             {
-                var rating = unitOfWork.Feedback.GetFirstOrDefault(c => c.CourseId == course.Id)?.Rating;
+                var rating = unitOfWork.Feedback.GetFirstOrDefault(c => c.CourseId == id)?.Rating;
+                var comments = unitOfWork.Feedback.SelectColumn(c => c.CourseId == id , c => c.Comment).ToList();
+                var instructorName = unitOfWork.Instructor.GetFirstOrDefault(u => u.Id == course.InstructorId).FullName;
+                var lessonNames = unitOfWork.Lesson.SelectColumn(c => c.Id == course.Id, l => l.Title).ToList();
                 var courseDetails = new CourseDetailsDTO()
                 {
                     Title = course.Title,
                     Price = course.Price,
                     Category = course.Category,
                     Rating = rating ?? 0,
-                    InstructorName = unitOfWork.Instructor.GetFirstOrDefault(u => u.Id == course.InstructorId).FullName,
+                    Comments = comments,
+                    InstructorName = instructorName,
                     Description = course.Description,
                     Level = course.Level,
                     Duration = course.Duration,
                     CreatedAt = course.CreatedAt,
                     LastUpdatedAt = course.LastUpdatedAt,
-                    LessonsName = unitOfWork.Lesson.GetAll(c => c.Id == course.Id).Select(l => l.Title).ToList(),
+                    LessonsName = lessonNames,
                 };
                 return Ok(courseDetails);
             }

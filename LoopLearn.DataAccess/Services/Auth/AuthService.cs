@@ -51,10 +51,12 @@ namespace LoopLearn.DataAccess.Services.Auth
                                                                     || u.Email == model.Email);
             if (user is not null)
             {
-                if (user.Username == model.Username)
-                    return new AuthModel {Message = "Username already exists." };
+                //if (user.Username == model.Username)
+                //    return new AuthModel {Message = "Username already exists." };
 
-                return new AuthModel { Message = "Email already exists." };
+                //return new AuthModel { Message = "Email already exists." };
+
+                return new AuthModel { Message = "Username or Email address are used before." };
             }
             var newStudent = new Student()
             {

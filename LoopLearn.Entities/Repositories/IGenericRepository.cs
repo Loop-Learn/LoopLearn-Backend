@@ -10,6 +10,7 @@ namespace LoopLearn.Entities.Repositories
     public interface IGenericRepository<T> where T : class
     {
         IEnumerable<T> GetAll(Expression<Func<T,bool>>? predicate=null,string? Include= null);
+        IEnumerable<TResult> SelectColumn<TResult>(Expression<Func<T, bool>>? predicate, Expression<Func<T, TResult>> column);
         T GetFirstOrDefault(Expression<Func<T, bool>>? predicate = null, string? Include = null);
         void Add(T entity);
         void Remove(T entity);

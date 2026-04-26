@@ -73,5 +73,15 @@ namespace LoopLearn.DataAccess.Implementation
         {
             _dbSet.RemoveRange(entities);
         }
+
+        public IEnumerable<TResult> SelectColumn<TResult>(Expression<Func<T, bool>>? predicate, Expression<Func<T, TResult>> column)
+        {
+            IQueryable<T> query = _dbSet;
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+            return query.Select(column).ToList(); // This return the column as IEnumerable<ColumnDataType>
+        }
     }
 }
