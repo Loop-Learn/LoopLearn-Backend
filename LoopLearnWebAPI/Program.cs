@@ -1,6 +1,6 @@
 
 using LoopLearn.DataAccess.Data;
-using LoopLearn.DataAccess.Helpers;
+using LoopLearn.Entities.ModelHelpers;
 using LoopLearn.DataAccess.Implementation;
 using LoopLearn.DataAccess.Services.Auth;
 using LoopLearn.Entities.Repositories;

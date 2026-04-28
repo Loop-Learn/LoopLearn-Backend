@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static LoopLearn.Entities.utils.Enums;
 
-namespace LoopLearn.DataAccess.Helpers
+namespace LoopLearn.Entities.ModelHelpers
 {
     public class AuthModel
     {

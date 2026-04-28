@@ -11,6 +11,7 @@ namespace LoopLearn.Entities.DTO
 {
     public class CourseDTO
     {
+        public int Id { get; set; }
         public string Avatar {  get; set; }
         public string Title { get; set; }
         public string Category { get; set; }
@@ -22,13 +23,15 @@ namespace LoopLearn.Entities.DTO
 
     public class CourseDetailsDTO : CourseDTO
     {
+        public string InstructorAvatar { get; set; }
+        public string InstructorBio { get; set; }
         public string Description { get; set; }
         public Level Level { get; set; }
         public int Duration { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
-        public List<string> LessonsName { get; set; } = new List<string>();
-        public List<string> Comments { get; set; } = new List<string>();
+        public List<LessonDTO> Lessons { get; set; } = new List<LessonDTO>();
+        public List<CommentsDTO> Comments { get; set; } = new List<CommentsDTO>();
     }
     public class CreateCourseDTO
     {
@@ -37,7 +40,7 @@ namespace LoopLearn.Entities.DTO
         public string Avatar { get; set; }
         [Required]
         [MaxLength(200, ErrorMessage = "Title cannot exceed 200 characters.")]
-        [RegularExpression(@"^[a-zA-Z]+$")]
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
         public string Title { get; set; }
 
         [Required]

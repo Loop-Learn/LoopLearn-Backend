@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LoopLearn.DataAccess.Helpers
+namespace LoopLearn.Entities.ModelHelpers
 {
     public class Jwt
     {

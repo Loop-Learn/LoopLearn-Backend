@@ -1,4 +1,4 @@
-﻿using LoopLearn.DataAccess.Helpers;
+﻿using LoopLearn.Entities.ModelHelpers;
 using LoopLearn.Entities.DTO;
 using System;
 using System.Collections.Generic;

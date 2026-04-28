@@ -31,7 +31,7 @@ namespace LoopLearnWebAPI.Controllers
 
             var result = authService.Register(registerDTO);
             if (!result.IsAuthenticated) 
-                return BadRequest(result.Message);
+                return BadRequest(new { Message = result.Message });
 
             return Ok(result);
         }
@@ -44,7 +44,7 @@ namespace LoopLearnWebAPI.Controllers
 
             var result = authService.Login(loginDTO);
             if (!result.IsAuthenticated)
-                return BadRequest(result.Message);
+                return BadRequest(new { Message = result.Message });
 
             return Ok(result);
         }

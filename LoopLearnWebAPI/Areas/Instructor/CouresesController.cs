@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LoopLearnWebAPI.Areas.Instructor
 {
-    [Authorize(Roles ="Instructor")]
+    //[Authorize(Roles ="Instructor")]
     [Area("Instructor")]
     [Route("api/[area]/[controller]")]
     [ApiController]
