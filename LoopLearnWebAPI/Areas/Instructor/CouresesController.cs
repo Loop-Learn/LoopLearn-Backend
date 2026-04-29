@@ -1,9 +1,7 @@
 ﻿using LoopLearn.Entities.DTO;
 using LoopLearn.Entities.Models;
 using LoopLearn.Entities.Repositories;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+using LoopLearn.Entities.utils.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoopLearnWebAPI.Areas.Instructor
@@ -30,7 +28,7 @@ namespace LoopLearnWebAPI.Areas.Instructor
                 var course = new Course()
                 {
                     Title = model.Title,
-                    Description = model.Description,
+                    Description =  model.Description.SanitizeHtml(),
                     Price = model.Price,
                     Avatar = model.Avatar ?? "not attached".ToUpper(),
                     Duration = model.Duration,

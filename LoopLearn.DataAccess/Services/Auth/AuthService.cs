@@ -51,11 +51,6 @@ namespace LoopLearn.DataAccess.Services.Auth
                                                                     || u.Email == model.Email);
             if (user is not null)
             {
-                //if (user.Username == model.Username)
-                //    return new AuthModel {Message = "Username already exists." };
-
-                //return new AuthModel { Message = "Email already exists." };
-
                 return new AuthModel { Message = "Username or Email address are used before." };
             }
             var newStudent = new Student()
@@ -69,8 +64,8 @@ namespace LoopLearn.DataAccess.Services.Auth
                 Phone = model.Phone,
                 Gender = model.Gender,
                 Role = RoleType.Student,
-                Avatar = "not attached".ToUpper()
-
+                Avatar = "not attached".ToUpper(),
+                JoinDate = DateTime.Now
             };
             try
             {

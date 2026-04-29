@@ -1,6 +1,9 @@
-﻿using LoopLearn.DataAccess.Data;
+﻿using BCrypt.Net;
+using LoopLearn.DataAccess.Data;
+using LoopLearn.Entities.DTO;
 using LoopLearn.Entities.Models;
 using LoopLearn.Entities.Repositories;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,20 +20,47 @@ namespace LoopLearn.DataAccess.Implementation
         {
             _context = context;
         }
-        public void Update(Student student)
+        public void UpdateProfile(ProfileUpdateDTO model,int studentId)
         {
-            var userInDb = _context.Students.FirstOrDefault(u => u.Id == student.Id);
-            if (userInDb != null)
+            var userInDb = _context.Students.FirstOrDefault(u => u.Id == studentId);
+            if (userInDb == null)
             {
-                userInDb.FName = student.FName;
-                userInDb.LName = student.LName;
-                userInDb.Avatar = student.Avatar;
-                userInDb.Phone = student.Phone;
-                userInDb.Email = student.Email;
-                userInDb.Password = student.Password;
-
+                throw new UnauthorizedAccessException();
             }
+           
+            userInDb.FName = model.FirstName ?? userInDb.FName;
+            userInDb.LName = model.LastName ?? userInDb.LName;
+            userInDb.Phone = model.Phone ?? userInDb.Phone;
+            userInDb.Email = model.Email ?? userInDb.Email;
 
+            _context.Entry(userInDb).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+        }
+        public void UpdatePassword(ChangePasswordDTO model, int studentId)
+        {
+            var userInDb = _context.Students.FirstOrDefault(u => u.Id == studentId);
+            if (userInDb == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            if (!BCrypt.Net.BCrypt.Verify(model.OldPassword, userInDb.Password))
+            {
+                throw new BcryptAuthenticationException();
+            }
+            userInDb.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+
+            _context.Entry(userInDb).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+        }
+
+        public void UpdateAvatar(string avatar, int studentId)
+        {
+            var userInDb = _context.Students.FirstOrDefault(u => u.Id == studentId);
+            if (userInDb == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            userInDb.Avatar = avatar ?? "not attached".ToUpper();
+
+            _context.Entry(userInDb).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
         }
     }
 }

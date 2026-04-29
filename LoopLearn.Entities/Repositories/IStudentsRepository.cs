@@ -1,4 +1,5 @@
-﻿using LoopLearn.Entities.Models;
+﻿using LoopLearn.Entities.DTO;
+using LoopLearn.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace LoopLearn.Entities.Repositories
 {
     public interface IStudentsRepository : IGenericRepository<Student>
     {
-        void Update(Student student);
+        void UpdateProfile(ProfileUpdateDTO model, int studentId);
+        void UpdatePassword(ChangePasswordDTO model, int studentId);
+        void UpdateAvatar(string avatar , int studentId);
     }
 }

@@ -64,7 +64,6 @@ namespace LoopLearnWebAPI.Controllers
         {
             try
             {
-
                 var courseDetails = unitOfWork.Course.Get(
                     predicate: c => c.Id == id,
                     selector: c => new CourseDetailsDTO
@@ -95,9 +94,8 @@ namespace LoopLearnWebAPI.Controllers
                             Title = l.Title
                         }).OrderBy(l => l.Number).ToList()
 					},
-                    Include: "Feedbacks.Student,Instructor,Lessons"
-
-                    ).FirstOrDefault();
+                    Include: "Feedbacks.Student,Instructor,Lessons")
+                    .FirstOrDefault();
 
                 if(courseDetails == null)
                 {

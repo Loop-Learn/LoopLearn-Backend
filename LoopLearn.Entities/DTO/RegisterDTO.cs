@@ -1,31 +1,31 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using LoopLearn.Entities.utils;
+using LoopLearn.Entities.utils.CustomValidations;
 using static LoopLearn.Entities.utils.Enums;
 
 namespace LoopLearn.Entities.DTO
 {
     public class RegisterDTO
     {
-        [Required,StringLength(20,MinimumLength =3)]
-        [RegularExpression(@"^[a-zA-Z]+$")]
+        [Required]
+        [Name]
         public string FName { get; set; }
 
-        [Required, StringLength(20, MinimumLength = 3)]
-        [RegularExpression(@"^[a-zA-Z]+$")]
+        [Required]
+        [Name]
         public string LName { get; set; }
 
-        [Required, StringLength(20, MinimumLength = 3)]
-        [RegularExpression(@"^(?!\d+$)[a-zA-Z0-9_]{3,25}$")]
+        [Required]
+        [Username]
         public string Username { get; set; }
 
         [Required, StringLength(100)]
-        [RegularExpression(@"^[A-Za-z0-9._%+-]+@[A-Za-z]+\.[A-Za-z]{2,}$", ErrorMessage = "Email address is not Valid.")]
         [EmailAddress(ErrorMessage = "Email address is not Valid.")]
         public string Email { get; set; }
 
-        [Required, StringLength(256, MinimumLength = 8)]
+        [Required]
         [DataType(DataType.Password)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%!*?&]).{8,256}$")]
+        [PasswordValidation]
         public string Password { get; set; }
 
         [Required]
@@ -33,20 +33,16 @@ namespace LoopLearn.Entities.DTO
         [Compare(nameof(Password), ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; }
 
-        [Required, StringLength(11, ErrorMessage = "Phone Number must be 11 digits")]
-        [RegularExpression(@"^01[0125]\d{8}$", ErrorMessage = "Phone Number is not Valid.Please make sure its an EGY phone Number")]
+        [Required]
+        [RegularExpression(@"^01[0125]\d{8}$", ErrorMessage = "Phone Number is not Valid. Please make sure its an EGY phone Number.")]
         public string Phone { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
-        [CustomValidation(typeof(CustomValidation),nameof(CustomValidation.BirthDate))]
+        [BirthDate]
         public DateTime BirthDate { get; set; }
 
-        [Required(ErrorMessage ="Gender must be Male or Female")]
+        [Required(ErrorMessage ="Gender must be Male or Female.")]
         public Gender Gender { get; set; }
-
-        //[Required]
-        //public RoleType Role { get; set; } = RoleType.Student;
-
     }
 }

@@ -37,22 +37,21 @@ namespace LoopLearn.Entities.DTO
     {
         [Required]
         public int InstructorId { get; set; }
+        [Required]
         public string Avatar { get; set; }
         [Required]
-        [MaxLength(200, ErrorMessage = "Title cannot exceed 200 characters.")]
-        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        [CourseTitle]
         public string Title { get; set; }
 
         [Required]
-        [RegularExpression(@"^[a-zA-Z]+$")]
+        [Category]
         public string Category { get; set; }
 
         [Required]
         public double Price { get; set; }
 
         [Required]
-        [MaxLength(4000, ErrorMessage = "Description cannot exceed 4000 characters.")]
-        [RegularExpression(@"^[a-zA-Z]+$")]
+        [StringLength(5000, MinimumLength = 50, ErrorMessage = "Description must be between 50 and 5000 characters.")]
         public string Description { get; set; }
 
         [Required]
