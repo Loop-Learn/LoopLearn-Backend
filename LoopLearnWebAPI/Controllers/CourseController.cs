@@ -62,52 +62,49 @@ namespace LoopLearnWebAPI.Controllers
         [Produces("application/json")]
         public IActionResult GetCourseById(int id)
         {
-            var course = unitOfWork.Course.GetFirstOrDefault(c=>c.Id == id,Include: "Feedbacks.Student,Instructor,Lessons");
-            if(course == null)
-            {
-                return NotFound();
-            }
             try
             {
-                var instructorName = course.Instructor.FullName;
-                var InstructorAvatar = course.Instructor.Avatar;
-                var InstructorBio = course.Instructor.Bio;
-                var rating = course.Feedbacks != null && course.Feedbacks.Any()
-                           ? course.Feedbacks.Average(f => f.Rating) : 0;
 
-                var commentsDTO = course.Feedbacks?.Select(c => new CommentsDTO()
-                                        {
-                                            StudentName = c.Student.FullName,
-                                            Avatar = c.Student.Avatar,
-                                            Comment = c.Comment,
-                                            CreatedAt = c.CreatedAt
-                                        }) .ToList() ?? new List<CommentsDTO>();
+                var courseDetails = unitOfWork.Course.Get(
+                    predicate: c => c.Id == id,
+                    selector: c => new CourseDetailsDTO
+                    {
+                        Id = c.Id,
+                        Title = c.Title,
+                        Price = c.Price,
+                        Category = c.Category,
+                        Rating = c.Feedbacks.Any()? c.Feedbacks.Average(f=>f.Rating) : 0,
+                        Comments = c.Feedbacks.Select(f => new CommentsDTO
+                        {
+                            StudentName = f.Student.FullName,
+                            Avatar = f.Student.Avatar,
+                            Comment = f.Comment,
+                            CreatedAt = f.CreatedAt
+                        }).OrderByDescending(f=>f.CreatedAt).ToList(),
+                        InstructorName = c.Instructor.FullName,
+                        InstructorAvatar = c.Instructor.Avatar,
+                        InstructorBio = c.Instructor.Bio,
+                        Description = c.Description,
+                        Level = c.Level,
+                        Duration = c.Duration,
+                        CreatedAt = c.CreatedAt,
+                        LastUpdatedAt = c.LastUpdatedAt,
+                        Lessons = c.Lessons.Select(l => new LessonDTO
+                        {
+                            Number = l.LessonNumber,
+                            Title = l.Title
+                        }).OrderBy(l => l.Number).ToList()
+					},
+                    Include: "Feedbacks.Student,Instructor,Lessons"
 
-                var lessons = course.Lessons?.Select(l=> new LessonDTO()
-                                        {
-                                            Number = l.LessonNumber,
-                                            Title = l.Title
-                                        }).OrderBy(l=>l.Number).ToList() ?? new List<LessonDTO>();
+                    ).FirstOrDefault();
 
-                var courseDetails = new CourseDetailsDTO()
+                if(courseDetails == null)
                 {
-                    Id = course.Id,
-                    Title = course.Title,
-                    Price = course.Price,
-                    Category = course.Category,
-                    Rating = rating,
-                    Comments = commentsDTO,
-                    InstructorName = instructorName,
-                    InstructorAvatar = InstructorAvatar,
-                    InstructorBio = InstructorBio,
-                    Description = course.Description,
-                    Level = course.Level,
-                    Duration = course.Duration,
-                    CreatedAt = course.CreatedAt,
-                    LastUpdatedAt = course.LastUpdatedAt,
-                    Lessons= lessons,
-                };
-                return Ok(courseDetails);
+                    return NotFound();
+				}
+
+				return Ok(courseDetails);
             }
             catch (Exception e)
             {

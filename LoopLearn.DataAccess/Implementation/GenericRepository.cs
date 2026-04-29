@@ -25,12 +25,38 @@ namespace LoopLearn.DataAccess.Implementation
             _dbSet.Add(entity);
         }
 
-        public bool Exists(Expression<Func<T, bool>> predicate)
+        public bool Exists(Expression<Func<T, bool>>? predicate = null)
         {
+            if (predicate == null)
+            {
+                return _dbSet.Any();
+            }
             return _dbSet.Any(predicate);
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? predicate = null, string? Include = null)
+		public IEnumerable<TResult> Get<TResult>(Expression<Func<T, bool>>? predicate = null, Expression<Func<T, TResult>>? selector = null, string? Include = null)
+		{
+			IQueryable<T> query= _dbSet;
+            if(predicate != null)
+            {
+                query = query.Where(predicate);
+			}
+            if (Include != null)
+            {
+                foreach (var item in Include.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(item);
+                }
+            }
+            if(selector != null)
+            {
+                return query.Select(selector).ToList();
+            }
+            return query.ToList() as IEnumerable<TResult> ?? Enumerable.Empty<TResult>() ;
+
+		}
+
+		public IEnumerable<T> GetAll(Expression<Func<T, bool>>? predicate = null, string? Include = null)
         {
             IQueryable<T> query = _dbSet;
             if (predicate != null)
@@ -61,7 +87,7 @@ namespace LoopLearn.DataAccess.Implementation
                     query = query.Include(item);
                 }
             }
-            return query.SingleOrDefault();
+            return query.FirstOrDefault();
         }
 
         public void Remove(T entity)
@@ -74,14 +100,14 @@ namespace LoopLearn.DataAccess.Implementation
             _dbSet.RemoveRange(entities);
         }
 
-        public IEnumerable<TResult> SelectColumn<TResult>(Expression<Func<T, bool>>? predicate, Expression<Func<T, TResult>> column)
-        {
-            IQueryable<T> query = _dbSet;
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
-            return query.Select(column).ToList(); // This return the column as IEnumerable<ColumnDataType>
-        }
+        //public IEnumerable<TResult> SelectColumn<TResult>(Expression<Func<T, bool>>? predicate, Expression<Func<T, TResult>> column)
+        //{
+        //    IQueryable<T> query = _dbSet;
+        //    if (predicate != null)
+        //    {
+        //        query = query.Where(predicate);
+        //    }
+        //    return query.Select(column).ToList(); // This return the column as IEnumerable<ColumnDataType>
+        //}
     }
 }
