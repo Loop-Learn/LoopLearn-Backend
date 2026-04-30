@@ -35,8 +35,6 @@ namespace LoopLearn.DataAccess.Services.Auth
 
             var token = GenerateToken(user);
 
-            authModel.Email= user.Email;
-            authModel.Username= user.Username;
             authModel.Role= user.Role;
             authModel.Token = new JwtSecurityTokenHandler().WriteToken(token);
             authModel.ExpiresOn = token.ValidTo;
@@ -76,12 +74,9 @@ namespace LoopLearn.DataAccess.Services.Auth
                 return new AuthModel
                 {
                     IsAuthenticated = true,
-                    Email = model.Email,
-                    Username = model.Username,
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
                     ExpiresOn = token.ValidTo,
                     Role = RoleType.Student
-                   
                 };
 
             }
@@ -108,7 +103,6 @@ namespace LoopLearn.DataAccess.Services.Auth
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             };
 

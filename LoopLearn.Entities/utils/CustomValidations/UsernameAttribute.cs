@@ -9,7 +9,7 @@ public class UsernameAttribute : ValidationAttribute
     {
         if (value == null || string.IsNullOrWhiteSpace(value.ToString()))
         {
-            return new ValidationResult("Username is required.");
+            return  ValidationResult.Success;
         }
 
         string username = value.ToString();
