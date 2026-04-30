@@ -72,7 +72,7 @@ namespace LoopLearnWebAPI.Areas.Student
             var studentId = GetUserId();
             try
             {
-                var isEmailExists = unitOfWork.Student.Exists(s=>s.Email == model.Email);
+                var isEmailExists = unitOfWork.Student.Exists(s=>s.Email == model.Email && s.Id != studentId);
                 if (isEmailExists)
                 {
                     return BadRequest(new {Message = "Email already in use by another account" });
