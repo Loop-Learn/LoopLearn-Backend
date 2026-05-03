@@ -8,12 +8,12 @@ namespace LoopLearnWebAPI.Areas.Instructor
 {
     //[Authorize(Roles ="Instructor")]
     [Area("Instructor")]
-    [Route("api/[area]/[controller]")]
+    [Route("api/[area]")]
     [ApiController]
-    public class CouresesController : ControllerBase
+    public class InstructorController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
-        public CouresesController(IUnitOfWork _unitOfWork)
+        public InstructorController(IUnitOfWork _unitOfWork)
         {
             unitOfWork = _unitOfWork;
         }
