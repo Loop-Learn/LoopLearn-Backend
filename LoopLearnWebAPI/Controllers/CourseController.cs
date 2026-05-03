@@ -163,6 +163,7 @@ namespace LoopLearnWebAPI.Controllers
 					selector: c => new CourseDetailsDTO
 					{
 						Id = c.Id,
+						Avatar = c.Avatar,
 						Title = c.Title,
 						Price = c.Price,
 						Category = c.Category,
