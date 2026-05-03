@@ -36,8 +36,6 @@ namespace LoopLearn.Entities.DTO
     public class CreateCourseDTO
     {
         [Required]
-        public int InstructorId { get; set; }
-        [Required]
         public string Avatar { get; set; }
         [Required]
         [CourseTitle]

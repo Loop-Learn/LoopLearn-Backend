@@ -2,11 +2,13 @@
 using LoopLearn.Entities.Models;
 using LoopLearn.Entities.Repositories;
 using LoopLearn.Entities.utils.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LoopLearnWebAPI.Areas.Instructor
 {
-    //[Authorize(Roles ="Instructor")]
+    [Authorize(Roles ="Instructor")]
     [Area("Instructor")]
     [Route("api/[area]")]
     [ApiController]
@@ -16,6 +18,17 @@ namespace LoopLearnWebAPI.Areas.Instructor
         public InstructorController(IUnitOfWork _unitOfWork)
         {
             unitOfWork = _unitOfWork;
+        }
+        private int GetUserId()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (String.IsNullOrEmpty(userIdClaim) 
+                || !unitOfWork.Instructor.Exists(i => i.Id == int.Parse(userIdClaim)))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            return int.Parse(userIdClaim);
         }
 
         [HttpPost("addCourse")]
@@ -33,7 +46,7 @@ namespace LoopLearnWebAPI.Areas.Instructor
                     Avatar = model.Avatar ?? "not attached".ToUpper(),
                     Duration = model.Duration,
                     Category = model.Category,
-                    InstructorId = model.InstructorId,
+                    InstructorId = GetUserId(),
                     Level = model.Level,
                     CreatedAt = DateTime.Now,
                     LastUpdatedAt = DateTime.Now
@@ -41,6 +54,10 @@ namespace LoopLearnWebAPI.Areas.Instructor
                 unitOfWork.Course.Add(course);
                 unitOfWork.Save();
                 return CreatedAtAction("GetCourseById", "Course", new { id = course.Id }, null);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized(new { Message = "Invalid Token" });
             }
             catch (Exception)
             {
