@@ -5,6 +5,7 @@
        public virtual ICollection<Enrollment> Enrollments { get; set; } = new HashSet<Enrollment>();
        public virtual ICollection<Feedback> Feedbacks { get; set; } = new HashSet<Feedback>();
        public virtual ICollection<LessonComment> LessonComments { get; set; } = new HashSet<LessonComment>();
+       public virtual ICollection<StudentLessonProgress> LessonProgresses { get; set; } = new List<StudentLessonProgress>();
 
     }
 }

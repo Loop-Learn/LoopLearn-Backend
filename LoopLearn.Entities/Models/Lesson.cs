@@ -7,12 +7,13 @@
         public string Description { get; set; }
         public string VideoURL { get; set; }
         public int LessonNumber { get; set; }
-        public bool IsCompleted { get; set; }
+        public TimeOnly LessonTime { get; set; }
+        //public bool IsCompleted { get; set; }
 
         public int CourseId { get; set; }
         public Course Course { get; set; }
         public Quiz Quiz { get; set; }
-
+        public virtual ICollection<StudentLessonProgress> LessonProgresses { get; set; } = new List<StudentLessonProgress>();
         public virtual ICollection<LessonComment> LessonComments { get; set; } = new HashSet<LessonComment>();
     }
 }

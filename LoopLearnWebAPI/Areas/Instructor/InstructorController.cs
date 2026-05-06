@@ -64,5 +64,36 @@ namespace LoopLearnWebAPI.Areas.Instructor
                 return StatusCode(500, "Something went wrong. Please try again");
             }
         }
+        
+        [HttpPost("addLesson")]
+        public IActionResult AddLesson([FromBody] CreateLessonDTO model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var isCourseExists = unitOfWork.Course.Exists(c => c.Id == model.CourseId 
+                                                            && c.InstructorId == GetUserId());
+            try
+            {
+                var lesson = new Lesson()
+                {
+                    Title = model.Title,
+                    Description = model.Description.SanitizeHtml(),
+                    VideoURL = model.VideoURL,
+
+
+                };
+                unitOfWork.Lesson.Add(lesson);
+                unitOfWork.Save();
+                return Ok();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized(new { Message = "Invalid Token" });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Something went wrong. Please try again");
+            }
+        }
+
     }
 }
