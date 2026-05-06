@@ -52,10 +52,11 @@ namespace LoopLearnWebAPI.Controllers
 				Response.Headers.Add("PageSize", pageSize.ToString());
 				return Ok(pagedCourses);
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
 
-				return StatusCode(500, "Something went wrong. Please try again"); ;
+				//return StatusCode(500, "Something went wrong. Please try again");
+				return StatusCode(500,e.Message);
 			}
 		}
 

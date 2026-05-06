@@ -29,6 +29,9 @@ namespace LoopLearn.DataAccess.Data
                .HasKey(e => new { e.StudentId, e.CourseId });
             modelBuilder.Entity<LessonComment>()
                 .HasKey(e => new { e.StudentId, e.LessonId });
+            modelBuilder.Entity<StudentLessonProgress>()
+                .HasKey(e => new { e.StudentId, e.LessonId });
+
 
 
             modelBuilder.Entity<Enrollment>()
@@ -73,6 +76,7 @@ namespace LoopLearn.DataAccess.Data
             modelBuilder.Entity<User>()
                 .Property(u => u.Role)
                 .HasConversion<string>();
+
         }
     }
 }
